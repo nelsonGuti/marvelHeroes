@@ -34,6 +34,11 @@ h1 {
   width: 125px;
 }
 
+.mat-column-delete,
+.mat-column-edit {
+  width: 75px;
+}
+
 .mat-row .mat-cell {
   border-bottom: 1px solid transparent;
   border-top: 1px solid transparent;

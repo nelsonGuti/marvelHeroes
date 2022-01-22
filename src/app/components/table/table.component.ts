@@ -2,12 +2,21 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { CreateHeroFormComponent } from '../create-hero-form/create-hero-form.component';
 import { HeroCardComponent } from '../hero-card/hero-card.component';
 import { Hero } from '../hero-card/hero.model';
 
 import DATA from './../../data/wikipedia_marvel_data.json';
 
+const DATA_KEY = 'marvel_heroes_data';
+function filterPredicate(record: Hero, filter: string) {
+  const wordsToFilterBy = JSON.parse(filter);
+  const isMatch = !wordsToFilterBy.length
+    ? true
+    : wordsToFilterBy.includes(record.nameLabel.trim().toLowerCase());
+  return isMatch;
+}
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -16,7 +25,7 @@ import DATA from './../../data/wikipedia_marvel_data.json';
 export class TableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  dataSource = new MatTableDataSource(DATA as Hero[]);
+  dataSource = new MatTableDataSource([] as Hero[]);
   displayedColumns = [
     'nameLabel',
     'creatorLabel',
@@ -25,26 +34,35 @@ export class TableComponent implements OnInit, AfterViewInit {
     'citizenshipLabel',
     'occupationLabel',
     'skillsLabel',
+    'delete',
+    'edit',
   ];
 
   chipsList = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private localStorageService: LocalStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.dataSource.filterPredicate = this.filterPredicate;
+    this.initializeDataSource();
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort as MatSort;
   }
 
-  filterPredicate(record: Hero, filter: string) {
-    const wordsToFilterBy = JSON.parse(filter);
-    const isMatch = !wordsToFilterBy.length
-      ? true
-      : wordsToFilterBy.includes(record.nameLabel.trim().toLowerCase());
-    return isMatch;
+  initializeDataSource() {
+    let data = this.localStorageService.getItem(DATA_KEY);
+
+    if (data == null) {
+      this.localStorageService.setItem(DATA_KEY, JSON.stringify(DATA));
+      data = this.localStorageService.getItem(DATA_KEY);
+    }
+
+    this.dataSource = new MatTableDataSource(JSON.parse(data || ''));
+    this.dataSource.filterPredicate = filterPredicate;
   }
 
   filterHeroes(heroes: string[]) {
@@ -60,23 +78,73 @@ export class TableComponent implements OnInit, AfterViewInit {
       width: '650px',
       data: { row },
     });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('The dialog was closed');
-    });
   }
 
   createHero() {
     const dialogRef = this.dialog.open(CreateHeroFormComponent, {
       width: '550px',
-      data: {},
+      data: null,
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (dialogRef.componentInstance.heroForm.status === 'VALID') {
+    dialogRef.afterClosed().subscribe((actionType: string) => {
+      if (
+        actionType === 'submit' &&
+        dialogRef.componentInstance.heroForm.status === 'VALID'
+      ) {
         const newHero = dialogRef.componentInstance.heroForm.value;
+
         this.dataSource.data.unshift(newHero as Hero);
         this.dataSource.filter = ''; // Refresh table
+
+        this.localStorageService.setItem(
+          DATA_KEY,
+          JSON.stringify(this.dataSource.data)
+        );
+      }
+    });
+  }
+
+  removeHero(event: Event, name: string) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.dataSource.data = this.dataSource.data.filter(
+      ({ nameLabel }) => nameLabel !== name
+    );
+
+    this.localStorageService.setItem(
+      DATA_KEY,
+      JSON.stringify(this.dataSource.data)
+    );
+  }
+
+  editHero(event: Event, hero: Hero) {
+    const index = this.dataSource.data.findIndex(
+      ({ nameLabel }) => nameLabel === hero.nameLabel
+    );
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const dialogRef = this.dialog.open(CreateHeroFormComponent, {
+      width: '650px',
+      data: { hero },
+    });
+
+    dialogRef.afterClosed().subscribe((actionType: string) => {
+      if (
+        actionType === 'submit' &&
+        dialogRef.componentInstance.heroForm.status === 'VALID'
+      ) {
+        const hero = dialogRef.componentInstance.heroForm.value;
+
+        this.dataSource.data[index] = hero;
+        this.dataSource.filter = ''; // Refresh table
+
+        this.localStorageService.setItem(
+          DATA_KEY,
+          JSON.stringify(this.dataSource.data)
+        );
       }
     });
   }
