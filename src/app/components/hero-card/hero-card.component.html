@@ -1,0 +1,21 @@
+<mat-card *ngIf="hero" class="example-card">
+  <mat-card-title-group>
+    <mat-card-title>{{ hero.nameLabel }}</mat-card-title>
+    <mat-card-subtitle> {{ hero.citizenshipLabel }}</mat-card-subtitle>
+    <mat-chip-list #chipList aria-label="Description" focused="false">
+      <mat-chip> {{ hero.genderLabel }}</mat-chip>
+      <mat-chip>{{ hero.occupationLabel }}</mat-chip>
+      <mat-chip>{{ hero.skillsLabel }}</mat-chip>
+    </mat-chip-list>
+  </mat-card-title-group>
+  <mat-card-content>
+    <p>Member of {{ hero.memberOfLabel }}</p>
+    <p>
+      Created by: <i>{{ hero.creatorLabel }}</i>
+    </p>
+  </mat-card-content>
+</mat-card>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

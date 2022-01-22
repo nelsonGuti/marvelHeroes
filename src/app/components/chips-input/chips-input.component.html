@@ -1,0 +1,18 @@
+<mat-form-field class="chip-list" appearance="fill">
+  <mat-label>Favorite heros</mat-label>
+  <mat-chip-list #chipList aria-label="hero selection">
+    <mat-chip *ngFor="let hero of heroes" (removed)="remove(hero)">
+      {{ hero }}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    <input
+      placeholder="New hero..."
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="addOnBlur"
+      (matChipInputTokenEnd)="add($event)"
+    />
+  </mat-chip-list>
+</mat-form-field>
