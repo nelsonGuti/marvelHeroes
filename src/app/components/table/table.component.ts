@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -24,6 +25,7 @@ function filterPredicate(record: Hero, filter: string) {
 })
 export class TableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   dataSource = new MatTableDataSource([] as Hero[]);
   displayedColumns = [
@@ -51,6 +53,7 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort as MatSort;
+    this.dataSource.paginator = this.paginator as MatPaginator;
   }
 
   initializeDataSource() {
@@ -94,7 +97,7 @@ export class TableComponent implements OnInit, AfterViewInit {
         const newHero = dialogRef.componentInstance.heroForm.value;
 
         this.dataSource.data.unshift(newHero as Hero);
-        this.dataSource.filter = ''; // Refresh table
+        this.dataSource.data = [...this.dataSource.data];
 
         this.localStorageService.setItem(
           DATA_KEY,
@@ -139,7 +142,7 @@ export class TableComponent implements OnInit, AfterViewInit {
         const hero = dialogRef.componentInstance.heroForm.value;
 
         this.dataSource.data[index] = hero;
-        this.dataSource.filter = ''; // Refresh table
+        this.dataSource.data = [...this.dataSource.data];
 
         this.localStorageService.setItem(
           DATA_KEY,
