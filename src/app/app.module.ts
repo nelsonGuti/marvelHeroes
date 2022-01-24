@@ -16,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 // Components
 import { TableComponent } from './components/table/table.component';
@@ -46,6 +48,8 @@ import { CreateHeroFormComponent } from './components/create-hero-form/create-he
     ReactiveFormsModule,
     MatRadioModule,
     MatPaginatorModule,
+    NgxChartsModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

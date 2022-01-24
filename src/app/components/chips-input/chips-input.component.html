@@ -1,5 +1,5 @@
 <mat-form-field class="chip-list" appearance="fill">
-  <mat-label>Favorite heros</mat-label>
+  <mat-label>Filter your favorite heroes</mat-label>
   <mat-chip-list #chipList aria-label="hero selection">
     <mat-chip *ngFor="let hero of heroes" (removed)="remove(hero)">
       {{ hero }}

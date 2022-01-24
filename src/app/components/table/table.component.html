@@ -1,4 +1,6 @@
-<h1>Marvel heroes</h1>
+<mat-toolbar>
+  <span>MARVEL HEROES</span>
+</mat-toolbar>
 <div class="actions-container">
   <app-chips-input (updateHeroes)="filterHeroes($event)"></app-chips-input>
   <button (click)="createHero()" mat-flat-button color="primary">
@@ -20,37 +22,122 @@
     </ng-container>
 
     <ng-container matColumnDef="nameLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Name</h2>
+          <ngx-charts-number-card
+            *ngIf="dataSource?.data?.length"
+            [view]="view"
+            [results]="[
+              { name: 'Total Heroes', value: dataSource?.data?.length }
+            ]"
+            [cardColor]="cardColor"
+          >
+          </ngx-charts-number-card>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.nameLabel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="creatorLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Creator</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Creator</h2>
+          <ngx-charts-bar-vertical
+            *ngIf="creatorData.length"
+            [view]="view"
+            [results]="creatorData"
+            [gradient]="gradient"
+            [yAxis]="true"
+          >
+          </ngx-charts-bar-vertical>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.creatorLabel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="genderLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Gender</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Gender</h2>
+          <ngx-charts-pie-chart
+            *ngIf="genderData.length"
+            [view]="view"
+            [results]="genderData"
+            [gradient]="gradient"
+            [labels]="showLabels"
+          >
+          </ngx-charts-pie-chart>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.genderLabel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="memberOfLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Member of</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Member of</h2>
+          <ngx-charts-bar-vertical
+            *ngIf="memberOfData.length"
+            [view]="view"
+            [results]="memberOfData"
+            [gradient]="gradient"
+            [yAxis]="true"
+          >
+          </ngx-charts-bar-vertical>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.memberOfLabel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="citizenshipLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Citizenship</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Citizenship</h2>
+          <ngx-charts-pie-chart
+            *ngIf="citizenshipData.length"
+            [view]="view"
+            [results]="citizenshipData"
+            [gradient]="gradient"
+            [labels]="showLabels"
+          >
+          </ngx-charts-pie-chart>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.citizenshipLabel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="occupationLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Occupation</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Occupation</h2>
+          <ngx-charts-bar-vertical
+            *ngIf="occupationData.length"
+            [view]="view"
+            [results]="occupationData"
+            [gradient]="gradient"
+            [yAxis]="true"
+          >
+          </ngx-charts-bar-vertical>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.occupationLabel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="skillsLabel">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Skills</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header-container">
+          <h2 mat-sort-header>Skills</h2>
+          <ngx-charts-bar-vertical
+            *ngIf="skillsData.length"
+            [view]="view"
+            [results]="skillsData"
+            [gradient]="gradient"
+            [yAxis]="true"
+          >
+          </ngx-charts-bar-vertical>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.skillsLabel }}</td>
     </ng-container>
 
@@ -86,7 +173,7 @@
 
   <mat-paginator
     *ngIf="dataSource.data.length"
-    [pageSizeOptions]="[10, 15, 20]"
+    [pageSizeOptions]="[5, 10, 15]"
     showFirstLastButtons
     aria-label="Select page of periodic elements"
   >

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ChartsService, HeroProps } from 'src/app/services/charts.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { CreateHeroFormComponent } from '../create-hero-form/create-hero-form.component';
 import { HeroCardComponent } from '../hero-card/hero-card.component';
@@ -27,6 +28,19 @@ export class TableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort | undefined;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
+  genderData = [];
+  creatorData = [];
+  memberOfData = [];
+  citizenshipData = [];
+  skillsData = [];
+  occupationData = [];
+
+  // chart config options
+  view: [number, number] = [200, 200];
+  gradient = true;
+  showLabels = true;
+  cardColor = '#efe8e7';
+
   dataSource = new MatTableDataSource([] as Hero[]);
   displayedColumns = [
     'nameLabel',
@@ -44,11 +58,13 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   constructor(
     private dialog: MatDialog,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private chartsService: ChartsService
   ) {}
 
   ngOnInit(): void {
     this.initializeDataSource();
+    this.updateCharts();
   }
 
   ngAfterViewInit() {
@@ -68,6 +84,38 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.dataSource.filterPredicate = filterPredicate;
   }
 
+  updateCharts() {
+    this.genderData = this.chartsService.wrangleData(
+      this.dataSource,
+      HeroProps.GENDER
+    );
+
+    this.creatorData = this.chartsService.wrangleData(
+      this.dataSource,
+      HeroProps.CREATOR
+    );
+
+    this.memberOfData = this.chartsService.wrangleData(
+      this.dataSource,
+      HeroProps.MEMBER_OF
+    );
+
+    this.citizenshipData = this.chartsService.wrangleData(
+      this.dataSource,
+      HeroProps.CITIZENSHIP
+    );
+
+    this.skillsData = this.chartsService.wrangleData(
+      this.dataSource,
+      HeroProps.SKILS
+    );
+
+    this.occupationData = this.chartsService.wrangleData(
+      this.dataSource,
+      HeroProps.OCCUPATION
+    );
+  }
+
   filterHeroes(heroes: string[]) {
     if (heroes.length) {
       this.dataSource.filter = JSON.stringify(heroes);
@@ -77,7 +125,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   clickedRow(row: any) {
-    const dialogRef = this.dialog.open(HeroCardComponent, {
+    this.dialog.open(HeroCardComponent, {
       width: '650px',
       data: { row },
     });
@@ -103,6 +151,8 @@ export class TableComponent implements OnInit, AfterViewInit {
           DATA_KEY,
           JSON.stringify(this.dataSource.data)
         );
+
+        this.updateCharts();
       }
     });
   }
@@ -119,6 +169,8 @@ export class TableComponent implements OnInit, AfterViewInit {
       DATA_KEY,
       JSON.stringify(this.dataSource.data)
     );
+
+    this.updateCharts();
   }
 
   editHero(event: Event, hero: Hero) {
@@ -148,6 +200,7 @@ export class TableComponent implements OnInit, AfterViewInit {
           DATA_KEY,
           JSON.stringify(this.dataSource.data)
         );
+        this.updateCharts();
       }
     });
   }
