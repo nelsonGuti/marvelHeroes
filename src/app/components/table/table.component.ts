@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ChartsService, HeroProps } from 'src/app/services/charts.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { ChartDialogComponent } from '../chart-dialog/chart-dialog.component';
 import { CreateHeroFormComponent } from '../create-hero-form/create-hero-form.component';
 import { HeroCardComponent } from '../hero-card/hero-card.component';
 import { Hero } from '../hero-card/hero.model';
@@ -202,6 +203,18 @@ export class TableComponent implements OnInit, AfterViewInit {
         );
         this.updateCharts();
       }
+    });
+  }
+
+  openChartDialog(
+    e: Event,
+    results: any,
+    type: 'pie' | 'bar',
+    chartName: string
+  ) {
+    const dialogRef = this.dialog.open(ChartDialogComponent, {
+      width: '650px',
+      data: { results, type, chartName },
     });
   }
 }

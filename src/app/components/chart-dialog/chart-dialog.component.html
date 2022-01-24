@@ -1,0 +1,27 @@
+<div class="chart-container">
+  <div class="column-header-container">
+    <h2>{{ data.chartName }}</h2>
+    <ngx-charts-bar-vertical
+      *ngIf="data.results.length && data.type === 'bar'"
+      [view]="view"
+      [results]="data.results"
+      [gradient]="gradient"
+      [xAxis]="true"
+      [yAxis]="true"
+    >
+    </ngx-charts-bar-vertical>
+
+    <ngx-charts-pie-chart
+      *ngIf="data.results.length && data.type === 'pie'"
+      [view]="view"
+      [results]="data.results"
+      [gradient]="gradient"
+      [labels]="showLabels"
+    >
+    </ngx-charts-pie-chart>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</div>

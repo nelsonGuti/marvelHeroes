@@ -8,6 +8,11 @@
   </button>
 </div>
 
+<div class="info-container">
+  <mat-icon aria-hidden="false" aria-label="Example home icon">info</mat-icon>
+  <p>Click on each chart to expand</p>
+</div>
+
 <div class="table-container">
   <table
     *ngIf="dataSource.data.length"
@@ -49,6 +54,7 @@
             [results]="creatorData"
             [gradient]="gradient"
             [yAxis]="true"
+            (click)="openChartDialog($event, creatorData, 'bar', 'Creator')"
           >
           </ngx-charts-bar-vertical>
         </div>
@@ -66,6 +72,7 @@
             [results]="genderData"
             [gradient]="gradient"
             [labels]="showLabels"
+            (click)="openChartDialog($event, genderData, 'pie', 'Gender')"
           >
           </ngx-charts-pie-chart>
         </div>
@@ -83,6 +90,7 @@
             [results]="memberOfData"
             [gradient]="gradient"
             [yAxis]="true"
+            (click)="openChartDialog($event, memberOfData, 'bar', 'Member of')"
           >
           </ngx-charts-bar-vertical>
         </div>
@@ -100,6 +108,9 @@
             [results]="citizenshipData"
             [gradient]="gradient"
             [labels]="showLabels"
+            (click)="
+              openChartDialog($event, citizenshipData, 'pie', 'Citizenship')
+            "
           >
           </ngx-charts-pie-chart>
         </div>
@@ -117,6 +128,9 @@
             [results]="occupationData"
             [gradient]="gradient"
             [yAxis]="true"
+            (click)="
+              openChartDialog($event, occupationData, 'bar', 'Occupation')
+            "
           >
           </ngx-charts-bar-vertical>
         </div>
@@ -134,6 +148,7 @@
             [results]="skillsData"
             [gradient]="gradient"
             [yAxis]="true"
+            (click)="openChartDialog($event, skillsData, 'bar', 'Skills')"
           >
           </ngx-charts-bar-vertical>
         </div>

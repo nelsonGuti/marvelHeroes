@@ -24,6 +24,7 @@ import { TableComponent } from './components/table/table.component';
 import { ChipsInputComponent } from './components/chips-input/chips-input.component';
 import { HeroCardComponent } from './components/hero-card/hero-card.component';
 import { CreateHeroFormComponent } from './components/create-hero-form/create-hero-form.component';
+import { ChartDialogComponent } from './components/chart-dialog/chart-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { CreateHeroFormComponent } from './components/create-hero-form/create-he
     ChipsInputComponent,
     HeroCardComponent,
     CreateHeroFormComponent,
+    ChartDialogComponent,
   ],
   imports: [
     BrowserModule,

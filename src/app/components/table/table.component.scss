@@ -25,6 +25,20 @@ mat-toolbar {
   }
 }
 
+.info-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 5px;
+  }
+  p {
+    margin: 0;
+  }
+}
+
 .mat-cell {
   width: 175px;
   text-align: center;
